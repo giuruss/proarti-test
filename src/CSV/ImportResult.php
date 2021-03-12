@@ -10,6 +10,8 @@ class ImportResult implements ImportResultInterface
 {
 
 
+
+
     public function getPersons(): iterable
     {
         // TODO: Implement getPersons() method.
