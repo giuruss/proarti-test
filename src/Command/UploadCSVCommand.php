@@ -3,6 +3,8 @@
 namespace App\Command;
 
 use App\Entity\Person;
+use App\Entity\Project;
+use App\Entity\Reward;
 use App\Interfaces\CSV\CsvManagerInterface;
 use App\Interfaces\Exceptions\BadColNameExceptionInterface;
 use App\Repository\PersonRepository;
@@ -86,22 +88,39 @@ final class UploadCSVCommand extends Command
 
     private function createPerson(string $filePath): void
     {
-        $person = new Person();
 
-        $result = $this->personRepository->find('toto');
-        if (null !== $result) {
-            echo $result->getAmount();
-        }
+//        $result = $this->personRepository->find('toto');
+//
+//        if (null !== $result) {
+//            echo $result->getAmount();
+//        }
+
+//        dd($this->getDataFromFile($filePath));
+
         foreach ($this->getDataFromFile($filePath) as $row) {
-            $person->setFirstName($row['first_name']);
-            $person->setLastName($row['last_name']);
-            $person->setAmount($row['amount']);
-            $person->setProjectName($row['project_name']);
-            $person->setReward($row['reward']);
-            $person->setRewardQuantity($row['reward_quantity']);
-        }
 
-        $this->entityManager->persist($person);
+            if (isset($row['first_name'], $row['last_name'])) {
+                $person = new Person($row['first_name'], $row['last_name']);
+                $this->entityManager->persist($person);
+            }
+
+            if (isset($row['project_name'], $row['amount'])) {
+                $project = new Project($row['project_name'], $row['amount']);
+                $this->entityManager->persist($project);
+                if (isset($person)) {
+                    $person->addProject($project);
+                }
+            }
+
+            if (isset($row['reward'], $row['reward_quantity'])) {
+                $reward = new Reward($row['reward'], $row['reward_quantity']);
+                $this->entityManager->persist($reward);
+                if (isset($project)) {
+                    $project->setReward($reward);
+                }
+            }
+
+        }
 
         $this->entityManager->flush();
     }

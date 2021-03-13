@@ -27,6 +27,17 @@ class Reward
      */
     private string $name;
 
+    /**
+     * @ORM\OneToOne(targetEntity=Project::class, mappedBy="reward", cascade={"persist", "remove"})
+     */
+    private Project $project;
+
+    public function __construct(string $name, int $quantity)
+    {
+        $this->name = $name;
+        $this->quantity = $quantity;
+    }
+
     public function getId(): ?int
     {
         return $this->id;
@@ -50,5 +61,25 @@ class Reward
     public function setName(string $name): void
     {
         $this->name = $name;
+    }
+
+    public function getProject(): Project
+    {
+        return $this->project;
+    }
+
+    public function setProject(Project $project): void
+    {
+        // unset the owning side of the relation if necessary
+        if ($project === null && $this->project !== null) {
+            $this->project->setReward(null);
+        }
+
+        // set the owning side of the relation if necessary
+        if ($project !== null && $project->getReward() !== $this) {
+            $project->setReward($this);
+        }
+
+        $this->project = $project;
     }
 }
