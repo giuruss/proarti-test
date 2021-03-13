@@ -8,6 +8,7 @@ use App\Entity\Reward;
 use App\Interfaces\CSV\CsvManagerInterface;
 use App\Interfaces\Exceptions\BadColNameExceptionInterface;
 use App\Repository\PersonRepository;
+use App\Repository\ProjectRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use SplFileObject;
 use Symfony\Component\Console\Command\Command;
@@ -25,6 +26,8 @@ final class UploadCSVCommand extends Command
     private EntityManagerInterface $entityManager;
 
     private PersonRepository $personRepository;
+    
+    private ProjectRepository $projectRepository;
 
     private SerializerInterface $serializer;
 
@@ -55,17 +58,24 @@ final class UploadCSVCommand extends Command
         $this->createPerson($input->getArgument('csv_file_path'));
 
         try {
-            $result = $this->upload->import(new SplFileObject($input->getArgument('csv_file_path')));
+            $result = $this->upload->import(
+                new SplFileObject($input->getArgument('csv_file_path')),
+                $this->personRepository,
+                $this->projectRepository
+            );
+
         } catch (BadColNameExceptionInterface $e) {
             $output->writeln($e->getColName().$e->getMessage());
 
             return Command::FAILURE;
         }
 
-        $output->writeln('File uploaded');
-        $output->writeln('Nb Person: '.$result->countPersons());
-        $output->writeln('Nb Project: '.$result->countProjects());
-        $output->writeln('Nb Donation: '.$result->countDonations());
+        if (null !== $result) {
+            $output->writeln('File uploaded');
+            $output->writeln('Nb Person: ' . $result->countPersons());
+            $output->writeln('Nb Project: ' . $result->countProjects());
+            $output->writeln('Nb Donation: ' . $result->countDonations());
+        }
 
         return Command::SUCCESS;
     }
@@ -94,8 +104,6 @@ final class UploadCSVCommand extends Command
 //        if (null !== $result) {
 //            echo $result->getAmount();
 //        }
-
-//        dd($this->getDataFromFile($filePath));
 
         foreach ($this->getDataFromFile($filePath) as $row) {
 
@@ -127,8 +135,6 @@ final class UploadCSVCommand extends Command
             }
 
         }
-
-
 
         $this->entityManager->flush();
     }

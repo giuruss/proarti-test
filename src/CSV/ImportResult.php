@@ -14,6 +14,12 @@ class ImportResult implements ImportResultInterface
 
     private iterable $projects;
 
+    public function __construct(iterable $persons, iterable $projects)
+    {
+        $this->persons = $persons;
+        $this->projects = $projects;
+    }
+
 
     public function getPersons(): iterable
     {
@@ -39,7 +45,7 @@ class ImportResult implements ImportResultInterface
     {
         $donations = [];
 
-        foreach ($this->projects as $project){
+        foreach ($this->projects as $project) {
             assert($project instanceof Project);
             $donations[] = $project->getAmount();
         }

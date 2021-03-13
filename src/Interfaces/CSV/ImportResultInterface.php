@@ -21,9 +21,7 @@ interface ImportResultInterface
 
     public function countProjects(): int;
 
-    /**
-     * @return iterable<Donation>
-     */
+
     public function getDonations(): iterable;
 
     public function countDonations(): int;
