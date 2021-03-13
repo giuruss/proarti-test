@@ -4,41 +4,50 @@
 namespace App\CSV;
 
 
+use App\Entity\Project;
 use App\Interfaces\CSV\ImportResultInterface;
 
 class ImportResult implements ImportResultInterface
 {
 
+    private iterable $persons;
 
+    private iterable $projects;
 
 
     public function getPersons(): iterable
     {
-        // TODO: Implement getPersons() method.
+        return $this->persons;
     }
 
     public function countPersons(): int
     {
-        // TODO: Implement countPersons() method.
+        return count([$this->persons]);
     }
 
     public function getProjects(): iterable
     {
-        // TODO: Implement getProjects() method.
+        return $this->projects;
     }
 
     public function countProjects(): int
     {
-        // TODO: Implement countProjects() method.
+        return count([$this->projects]);
     }
 
     public function getDonations(): iterable
     {
-        // TODO: Implement getDonations() method.
+        $donations = [];
+
+        foreach ($this->projects as $project){
+            assert($project instanceof Project);
+            $donations[] = $project->getAmount();
+        }
+        return $donations;
     }
 
     public function countDonations(): int
     {
-        // TODO: Implement countDonations() method.
+        return count([$this->getDonations()]);
     }
 }

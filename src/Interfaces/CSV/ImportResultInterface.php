@@ -3,6 +3,7 @@
 namespace App\Interfaces\CSV;
 
 use App\Entity\Person;
+use App\Entity\Project;
 
 interface ImportResultInterface
 {

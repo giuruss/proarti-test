@@ -101,12 +101,16 @@ final class UploadCSVCommand extends Command
 
             if (isset($row['first_name'], $row['last_name'])) {
                 $person = new Person($row['first_name'], $row['last_name']);
-                $this->entityManager->persist($person);
+                if (!$this->entityManager->contains($person)) {
+                    $this->entityManager->persist($person);
+                }
             }
 
             if (isset($row['project_name'], $row['amount'])) {
                 $project = new Project($row['project_name'], $row['amount']);
-                $this->entityManager->persist($project);
+                if (!$this->entityManager->contains($project)) {
+                    $this->entityManager->persist($project);
+                }
                 if (isset($person)) {
                     $person->addProject($project);
                 }
@@ -114,13 +118,17 @@ final class UploadCSVCommand extends Command
 
             if (isset($row['reward'], $row['reward_quantity'])) {
                 $reward = new Reward($row['reward'], $row['reward_quantity']);
-                $this->entityManager->persist($reward);
+                if (!$this->entityManager->contains($reward)) {
+                    $this->entityManager->persist($reward);
+                }
                 if (isset($project)) {
                     $project->setReward($reward);
                 }
             }
 
         }
+
+
 
         $this->entityManager->flush();
     }
