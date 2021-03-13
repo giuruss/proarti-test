@@ -45,7 +45,6 @@ class Project
         $this->persons = new ArrayCollection();
     }
 
-
     public function getId(): ?int
     {
         return $this->id;

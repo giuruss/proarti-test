@@ -71,12 +71,12 @@ class Reward
     public function setProject(Project $project): void
     {
         // unset the owning side of the relation if necessary
-        if ($project === null && $this->project !== null) {
+        if (null === $project && null !== $this->project) {
             $this->project->setReward(null);
         }
 
         // set the owning side of the relation if necessary
-        if ($project !== null && $project->getReward() !== $this) {
+        if (null !== $project && $project->getReward() !== $this) {
             $project->setReward($this);
         }
 

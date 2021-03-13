@@ -26,7 +26,7 @@ final class UploadCSVCommand extends Command
     private EntityManagerInterface $entityManager;
 
     private PersonRepository $personRepository;
-    
+
     private ProjectRepository $projectRepository;
 
     private SerializerInterface $serializer;
@@ -63,7 +63,6 @@ final class UploadCSVCommand extends Command
                 $this->personRepository,
                 $this->projectRepository
             );
-
         } catch (BadColNameExceptionInterface $e) {
             $output->writeln($e->getColName().$e->getMessage());
 
@@ -72,9 +71,9 @@ final class UploadCSVCommand extends Command
 
         if (null !== $result) {
             $output->writeln('File uploaded');
-            $output->writeln('Nb Person: ' . $result->countPersons());
-            $output->writeln('Nb Project: ' . $result->countProjects());
-            $output->writeln('Nb Donation: ' . $result->countDonations());
+            $output->writeln('Nb Person: '.$result->countPersons());
+            $output->writeln('Nb Project: '.$result->countProjects());
+            $output->writeln('Nb Donation: '.$result->countDonations());
         }
 
         return Command::SUCCESS;
@@ -98,7 +97,6 @@ final class UploadCSVCommand extends Command
 
     private function createPerson(string $filePath): void
     {
-
 //        $result = $this->personRepository->find('toto');
 //
 //        if (null !== $result) {
@@ -106,7 +104,6 @@ final class UploadCSVCommand extends Command
 //        }
 
         foreach ($this->getDataFromFile($filePath) as $row) {
-
             if (isset($row['first_name'], $row['last_name'])) {
                 $person = new Person($row['first_name'], $row['last_name']);
                 if (!$this->entityManager->contains($person)) {
@@ -133,7 +130,6 @@ final class UploadCSVCommand extends Command
                     $project->setReward($reward);
                 }
             }
-
         }
 
         $this->entityManager->flush();

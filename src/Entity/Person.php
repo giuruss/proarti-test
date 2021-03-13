@@ -84,5 +84,4 @@ class Person
     {
         $this->projects->removeElement($project);
     }
-
 }

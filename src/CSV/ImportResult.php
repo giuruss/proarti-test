@@ -1,15 +1,12 @@
 <?php
 
-
 namespace App\CSV;
-
 
 use App\Entity\Project;
 use App\Interfaces\CSV\ImportResultInterface;
 
 class ImportResult implements ImportResultInterface
 {
-
     private iterable $persons;
 
     private iterable $projects;
@@ -20,7 +17,6 @@ class ImportResult implements ImportResultInterface
         $this->projects = $projects;
     }
 
-
     public function getPersons(): iterable
     {
         return $this->persons;
@@ -28,7 +24,7 @@ class ImportResult implements ImportResultInterface
 
     public function countPersons(): int
     {
-        return count([$this->persons]);
+        return \count([$this->persons]);
     }
 
     public function getProjects(): iterable
@@ -38,7 +34,7 @@ class ImportResult implements ImportResultInterface
 
     public function countProjects(): int
     {
-        return count([$this->projects]);
+        return \count([$this->projects]);
     }
 
     public function getDonations(): iterable
@@ -46,14 +42,15 @@ class ImportResult implements ImportResultInterface
         $donations = [];
 
         foreach ($this->projects as $project) {
-            assert($project instanceof Project);
+            \assert($project instanceof Project);
             $donations[] = $project->getAmount();
         }
+
         return $donations;
     }
 
     public function countDonations(): int
     {
-        return count([$this->getDonations()]);
+        return \count([$this->getDonations()]);
     }
 }

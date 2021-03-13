@@ -38,5 +38,4 @@ final class CsvManager implements CsvManagerInterface
 
         return null;
     }
-
 }
