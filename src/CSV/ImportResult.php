@@ -2,18 +2,20 @@
 
 namespace App\CSV;
 
-use App\Entity\Project;
 use App\Interfaces\CSV\ImportResultInterface;
 
 class ImportResult implements ImportResultInterface
 {
     private iterable $persons;
-
+    private iterable $donations;
+    private iterable $rewards;
     private iterable $projects;
 
-    public function __construct(iterable $persons, iterable $projects)
+    public function __construct(iterable $persons, iterable $donations, iterable $rewards, iterable $projects)
     {
         $this->persons = $persons;
+        $this->donations = $donations;
+        $this->rewards = $rewards;
         $this->projects = $projects;
     }
 
@@ -39,14 +41,7 @@ class ImportResult implements ImportResultInterface
 
     public function getDonations(): iterable
     {
-        $donations = [];
-
-        foreach ($this->projects as $project) {
-            \assert($project instanceof Project);
-            $donations[] = $project->getAmount();
-        }
-
-        return $donations;
+        return $this->donations;
     }
 
     public function countDonations(): int

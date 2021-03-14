@@ -15,63 +15,57 @@ class Donation
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
      */
-    private $id;
+    private ?int $id = null;
 
     /**
      * @ORM\Column(type="float")
      */
-    private $amount;
+    private float $amount;
 
     /**
      * @ORM\ManyToOne(targetEntity=Person::class, inversedBy="donations")
      * @ORM\JoinColumn(nullable=false)
      */
-    private $person;
+    private Person $person;
 
     /**
      * @ORM\ManyToOne(targetEntity=Reward::class, inversedBy="donations")
      * @ORM\JoinColumn(nullable=false)
      */
-    private $reward;
+    private Reward $reward;
 
     public function getId(): ?int
     {
         return $this->id;
     }
 
-    public function getAmount(): ?float
+    public function getAmount(): float
     {
         return $this->amount;
     }
 
-    public function setAmount(float $amount): self
+    public function setAmount(float $amount): void
     {
         $this->amount = $amount;
-
-        return $this;
     }
 
-    public function getPerson(): ?Person
+    public function getPerson(): Person
     {
         return $this->person;
     }
 
-    public function setPerson(?Person $person): self
+    public function setPerson(Person $person): void
     {
         $this->person = $person;
-
-        return $this;
     }
 
-    public function getReward(): ?Reward
+    public function getReward(): Reward
     {
         return $this->reward;
     }
 
-    public function setReward(?Reward $reward): self
+    public function setReward(Reward $reward): void
     {
         $this->reward = $reward;
-
-        return $this;
     }
 }

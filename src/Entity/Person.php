@@ -17,22 +17,22 @@ class Person
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
      */
-    private $id;
+    private ?int $id = null;
 
     /**
      * @ORM\Column(type="string", length=50)
      */
-    private $firstName;
+    private string $firstName;
 
     /**
      * @ORM\Column(type="string", length=50)
      */
-    private $lastName;
+    private string $lastName;
 
     /**
      * @ORM\OneToMany(targetEntity=Donation::class, mappedBy="person", orphanRemoval=true)
      */
-    private $donations;
+    private iterable $donations;
 
     public function __construct()
     {
@@ -44,49 +44,43 @@ class Person
         return $this->id;
     }
 
-    public function getFirstName(): ?string
+    public function getFirstName(): string
     {
         return $this->firstName;
     }
 
-    public function setFirstName(string $firstName): self
+    public function setFirstName(string $firstName): void
     {
         $this->firstName = $firstName;
-
-        return $this;
     }
 
-    public function getLastName(): ?string
+    public function getLastName(): string
     {
         return $this->lastName;
     }
 
-    public function setLastName(string $lastName): self
+    public function setLastName(string $lastName): void
     {
         $this->lastName = $lastName;
-
-        return $this;
     }
 
     /**
-     * @return Collection|Donation[]
+     * @return iterable
      */
-    public function getDonations(): Collection
+    public function getDonations(): iterable
     {
         return $this->donations;
     }
 
-    public function addDonation(Donation $donation): self
+    public function addDonation(Donation $donation): void
     {
         if (!$this->donations->contains($donation)) {
             $this->donations[] = $donation;
             $donation->setPerson($this);
         }
-
-        return $this;
     }
 
-    public function removeDonation(Donation $donation): self
+    public function removeDonation(Donation $donation): void
     {
         if ($this->donations->removeElement($donation)) {
             // set the owning side to null (unless already changed)
@@ -94,7 +88,5 @@ class Person
                 $donation->setPerson(null);
             }
         }
-
-        return $this;
     }
 }

@@ -2,6 +2,7 @@
 
 namespace App\Interfaces\CSV;
 
+use App\Entity\Donation;
 use App\Entity\Person;
 use App\Entity\Project;
 
@@ -21,6 +22,10 @@ interface ImportResultInterface
 
     public function countProjects(): int;
 
+
+    /**
+     * @return iterable<Donation>
+     */
     public function getDonations(): iterable;
 
     public function countDonations(): int;

@@ -17,17 +17,17 @@ class Project
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
      */
-    private $id;
+    private ?int $id = null;
 
     /**
      * @ORM\Column(type="string", length=50)
      */
-    private $name;
+    private string $name;
 
     /**
      * @ORM\OneToMany(targetEntity=Reward::class, mappedBy="project", orphanRemoval=true)
      */
-    private $rewards;
+    private iterable $rewards;
 
     public function __construct()
     {
@@ -39,37 +39,33 @@ class Project
         return $this->id;
     }
 
-    public function getName(): ?string
+    public function getName(): string
     {
         return $this->name;
     }
 
-    public function setName(string $name): self
+    public function setName(string $name): void
     {
         $this->name = $name;
-
-        return $this;
     }
 
     /**
-     * @return Collection|Reward[]
+     * @return iterable
      */
-    public function getRewards(): Collection
+    public function getRewards(): iterable
     {
         return $this->rewards;
     }
 
-    public function addReward(Reward $reward): self
+    public function addReward(Reward $reward): void
     {
         if (!$this->rewards->contains($reward)) {
             $this->rewards[] = $reward;
             $reward->setProject($this);
         }
-
-        return $this;
     }
 
-    public function removeReward(Reward $reward): self
+    public function removeReward(Reward $reward): void
     {
         if ($this->rewards->removeElement($reward)) {
             // set the owning side to null (unless already changed)
@@ -77,7 +73,5 @@ class Project
                 $reward->setProject(null);
             }
         }
-
-        return $this;
     }
 }
