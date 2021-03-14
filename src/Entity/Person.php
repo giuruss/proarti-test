@@ -34,8 +34,10 @@ class Person
      */
     private iterable $donations;
 
-    public function __construct()
+    public function __construct(string $firstName, string $lastName)
     {
+        $this->firstName = $firstName;
+        $this->lastName = $lastName;
         $this->donations = new ArrayCollection();
     }
 

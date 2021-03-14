@@ -7,8 +7,10 @@ use App\Entity\Project;
 use App\Entity\Reward;
 use App\Interfaces\CSV\CsvManagerInterface;
 use App\Interfaces\CSV\ImportResultInterface;
+use App\Repository\DonationRepository;
 use App\Repository\PersonRepository;
 use App\Repository\ProjectRepository;
+use App\Repository\RewardRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Serializer\SerializerInterface;
 
@@ -17,18 +19,25 @@ final class CsvManager implements CsvManagerInterface
     private EntityManagerInterface $entityManager;
     private SerializerInterface $serializer;
     private PersonRepository $personRepository;
+    private DonationRepository $donationRepository;
     private ProjectRepository $projectRepository;
+    private RewardRepository $rewardRepository;
+
 
     public function __construct(
         EntityManagerInterface $entityManager,
         SerializerInterface $serializer,
         PersonRepository $personRepository,
-        ProjectRepository $projectRepository
+        DonationRepository $donationRepository,
+        ProjectRepository $projectRepository,
+        RewardRepository $rewardRepository
     ) {
         $this->entityManager = $entityManager;
         $this->serializer = $serializer;
         $this->personRepository = $personRepository;
+        $this->donationRepository = $donationRepository;
         $this->projectRepository = $projectRepository;
+        $this->rewardRepository = $rewardRepository;
     }
 
     /**
@@ -39,9 +48,11 @@ final class CsvManager implements CsvManagerInterface
     public function import(\SplFileInfo $filePath): ImportResultInterface
     {
         $persons = $this->personRepository->findAll();
+        $donations = $this->donationRepository->findAll();
         $projects = $this->projectRepository->findAll();
+        $rewards = $this->rewardRepository->findAll();
 
-        return new ImportResult($persons, $projects);
+        return new ImportResult($persons, $donations, $rewards, $projects);
     }
 
     public function createPerson(string $filePath): void
@@ -49,9 +60,9 @@ final class CsvManager implements CsvManagerInterface
         foreach ($this->getDataFromFile($filePath) as $row) {
             if (isset($row['project_name'], $row['amount'])) {
                 if (\is_int($row['amount'])) {
-                    $project = new Project($row['project_name'], $row['amount']);
+                    $project = new Project($row['project_name']);
                 } else {
-                    $project = new Project($row['project_name'], (int) $row['amount']);
+                    $project = new Project($row['project_name']);
                 }
 
                 if (!$this->entityManager->contains($project)) {

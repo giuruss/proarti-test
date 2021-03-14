@@ -29,8 +29,9 @@ class Project
      */
     private iterable $rewards;
 
-    public function __construct()
+    public function __construct(string $name)
     {
+        $this->name = $name;
         $this->rewards = new ArrayCollection();
     }
 

@@ -39,9 +39,12 @@ class Reward
      */
     private Project $project;
 
-    public function __construct()
+    public function __construct(string $name, int $quantity, Project $project)
     {
+        $this->name = $name;
+        $this->quantity = $quantity;
         $this->donations = new ArrayCollection();
+        $this->project = $project;
     }
 
     public function getId(): ?int
