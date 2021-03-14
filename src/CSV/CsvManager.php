@@ -74,7 +74,12 @@ final class CsvManager implements CsvManagerInterface
         foreach ($this->getDataFromFile($filePath) as $row) {
 
             if (isset($row['project_name'], $row['amount'])) {
-                $project = new Project($row['project_name'], $row['amount']);
+
+                if (is_int($row['amount'])) {
+                    $project = new Project($row['project_name'], $row['amount']);
+                } else {
+                    $project = new Project($row['project_name'], (int) $row['amount']);
+                }
 
                 if (!$this->entityManager->contains($project)) {
                     $this->entityManager->persist($project);
@@ -82,7 +87,12 @@ final class CsvManager implements CsvManagerInterface
             }
 
             if (isset($row['reward'], $row['reward_quantity'])) {
-                $reward = new Reward($row['reward'], $row['reward_quantity']);
+
+                if (is_int($row['reward_quantity'])) {
+                    $reward = new Reward($row['reward'], $row['reward_quantity']);
+                } else {
+                    $reward = new Reward($row['reward'], (int) $row['reward_quantity']);
+                }
                 if (!$this->entityManager->contains($reward)) {
                     $this->entityManager->persist($reward);
                     if (isset($project)) {
