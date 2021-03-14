@@ -2,6 +2,7 @@
 
 namespace App\CSV;
 
+use App\Entity\Donation;
 use App\Entity\Person;
 use App\Entity\Project;
 use App\Entity\Reward;
@@ -55,51 +56,66 @@ final class CsvManager implements CsvManagerInterface
         return new ImportResult($persons, $donations, $rewards, $projects);
     }
 
+
+
     public function createPerson(string $filePath): void
     {
         foreach ($this->getDataFromFile($filePath) as $row) {
-            if (isset($row['project_name'], $row['amount'])) {
-                if (\is_int($row['amount'])) {
-                    $project = new Project($row['project_name']);
-                } else {
-                    $project = new Project($row['project_name']);
-                }
-
-                if (!$this->entityManager->contains($project)) {
-                    $this->entityManager->persist($project);
-                }
-            }
-
-            if (isset($row['reward'], $row['reward_quantity'])) {
-                if (\is_int($row['reward_quantity'])) {
-                    $reward = new Reward($row['reward'], $row['reward_quantity']);
-                } else {
-                    $reward = new Reward($row['reward'], (int) $row['reward_quantity']);
-                }
-
-                if (!$this->entityManager->contains($reward)) {
-                    $this->entityManager->persist($reward);
-                }
-
-                if (isset($project)) {
-                    $reward->setProject($project);
-                }
-            }
 
             if (isset($row['first_name'], $row['last_name'])) {
-                $person = new Person($row['first_name'], $row['last_name']);
 
-                if (!$this->entityManager->contains($person)) {
+                $person = $this->personRepository->findOneBy(['firstName' => $row['first_name'], 'lastName' => $row['last_name']]);
+
+                if (null === $person) {
+                    $person = new Person($row['first_name'], $row['last_name']);
                     $this->entityManager->persist($person);
                 }
 
-                if (isset($project)) {
-                    $project->addPerson($person);
+            }
+
+            if (isset($row['project_name'])) {
+
+                $project = $this->projectRepository->findOneBy(['name' => $row['project_name']]);
+
+                if (null === $project) {
+                    $project = new Project($row['project_name']);
+                    $this->entityManager->persist($project);
+                }
+
+            }
+
+            if (isset($row['reward'])) {
+
+                $reward = $this->rewardRepository
+                    ->findOneBy(['name' => $row['reward'], 'quantity' => $row['reward_quantity']]);
+
+                if (null === $reward) {
+                    if (\is_int($row['reward_quantity'])) {
+                        $reward = new Reward($row['reward'], $row['reward_quantity'], $project);
+                    } else {
+                        $reward = new Reward($row['reward'], (int)$row['reward_quantity'], $project);
+                    }
+                    $this->entityManager->persist($reward);
                 }
             }
+
+            if (isset($row['amount'])) {
+
+                $donation = $this->donationRepository->findOneBy(['amount' => $row['amount']]);
+
+                if (null === $donation) {
+                    if (\is_int($row['amount'])) {
+                        $donation = new Donation($row['amount'], $person, $reward);
+                    } else {
+                        $donation = new Donation((int)$row['amount'], $person, $reward);
+                    }
+                    $this->entityManager->persist($donation);
+                }
+            }
+
+            $this->entityManager->flush();
         }
 
-        $this->entityManager->flush();
     }
 
     private function getDataFromFile(string $filePath): array
