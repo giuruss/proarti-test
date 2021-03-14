@@ -10,5 +10,5 @@ interface CsvManagerInterface
     /**
      * @throws BadColNameExceptionInterface
      */
-    public function import(SplFileInfo $file): ?ImportResultInterface;
+    public function import(SplFileInfo $file): ImportResultInterface;
 }

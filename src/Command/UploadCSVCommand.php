@@ -47,15 +47,11 @@ final class UploadCSVCommand extends Command
             return Command::FAILURE;
         }
 
-        if (null !== $result) {
-            $output->writeln('File uploaded');
-            $output->writeln('Nb Person: '.$result->countPersons());
-            $output->writeln('Nb Project: '.$result->countProjects());
-            $output->writeln('Nb Donation: '.$result->countDonations());
-        }
+        $output->writeln('File uploaded');
+        $output->writeln('Nb Person: '.$result->countPersons());
+        $output->writeln('Nb Project: '.$result->countProjects());
+        $output->writeln('Nb Donation: '.$result->countDonations());
 
         return Command::SUCCESS;
     }
-
-
 }
