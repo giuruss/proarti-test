@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use App\Repository\PersonRepository;
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -16,28 +17,26 @@ class Person
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
      */
-    private ?int $id = null;
+    private $id;
 
     /**
      * @ORM\Column(type="string", length=50)
      */
-    private string $firstName;
+    private $firstName;
 
     /**
      * @ORM\Column(type="string", length=50)
      */
-    private string $lastName;
+    private $lastName;
 
     /**
-     * @ORM\ManyToMany(targetEntity=Project::class, inversedBy="persons")
+     * @ORM\OneToMany(targetEntity=Donation::class, mappedBy="person", orphanRemoval=true)
      */
-    private iterable $projects;
+    private $donations;
 
-    public function __construct(string $firstName, string $lastName)
+    public function __construct()
     {
-        $this->firstName = $firstName;
-        $this->lastName = $lastName;
-        $this->projects = new ArrayCollection();
+        $this->donations = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -45,43 +44,57 @@ class Person
         return $this->id;
     }
 
-    public function getFirstName(): string
+    public function getFirstName(): ?string
     {
         return $this->firstName;
     }
 
-    public function setFirstName(string $firstName): void
+    public function setFirstName(string $firstName): self
     {
         $this->firstName = $firstName;
+
+        return $this;
     }
 
-    public function getLastName(): string
+    public function getLastName(): ?string
     {
         return $this->lastName;
     }
 
-    public function setLastName(string $lastName): void
+    public function setLastName(string $lastName): self
     {
         $this->lastName = $lastName;
+
+        return $this;
     }
 
     /**
-     * @return iterable|Project[]
+     * @return Collection|Donation[]
      */
-    public function getProjects(): ?iterable
+    public function getDonations(): Collection
     {
-        return $this->projects;
+        return $this->donations;
     }
 
-    public function addProject(Project $project): void
+    public function addDonation(Donation $donation): self
     {
-        if (!$this->projects->contains($project)) {
-            $this->projects[] = $project;
+        if (!$this->donations->contains($donation)) {
+            $this->donations[] = $donation;
+            $donation->setPerson($this);
         }
+
+        return $this;
     }
 
-    public function removeProject(Project $project): void
+    public function removeDonation(Donation $donation): self
     {
-        $this->projects->removeElement($project);
+        if ($this->donations->removeElement($donation)) {
+            // set the owning side to null (unless already changed)
+            if ($donation->getPerson() === $this) {
+                $donation->setPerson(null);
+            }
+        }
+
+        return $this;
     }
 }

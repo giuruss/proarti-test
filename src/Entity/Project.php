@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use App\Repository\ProjectRepository;
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -16,33 +17,21 @@ class Project
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
      */
-    private ?int $id = null;
+    private $id;
 
     /**
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(type="string", length=50)
      */
-    private string $name;
+    private $name;
 
     /**
-     * @ORM\Column(type="float")
+     * @ORM\OneToMany(targetEntity=Reward::class, mappedBy="project", orphanRemoval=true)
      */
-    private float $amount;
+    private $rewards;
 
-    /**
-     * @ORM\ManyToMany(targetEntity=Person::class, mappedBy="projects")
-     */
-    private iterable $persons;
-
-    /**
-     * @ORM\OneToOne(targetEntity=Reward::class, inversedBy="project", cascade={"persist", "remove"})
-     */
-    private ?Reward $reward = null;
-
-    public function __construct(string $name, float $amount)
+    public function __construct()
     {
-        $this->name = $name;
-        $this->amount = $amount;
-        $this->persons = new ArrayCollection();
+        $this->rewards = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -50,53 +39,45 @@ class Project
         return $this->id;
     }
 
-    public function getName(): string
+    public function getName(): ?string
     {
         return $this->name;
     }
 
-    public function setName(string $name): void
+    public function setName(string $name): self
     {
         $this->name = $name;
+
+        return $this;
     }
 
-    public function getAmount(): float
+    /**
+     * @return Collection|Reward[]
+     */
+    public function getRewards(): Collection
     {
-        return $this->amount;
+        return $this->rewards;
     }
 
-    public function setAmount(float $amount): void
+    public function addReward(Reward $reward): self
     {
-        $this->amount = $amount;
-    }
-
-    public function getPersons(): iterable
-    {
-        return $this->persons;
-    }
-
-    public function addPerson(Person $person): void
-    {
-        if (!$this->persons->contains($person)) {
-            $this->persons[] = $person;
-            $person->addProject($this);
+        if (!$this->rewards->contains($reward)) {
+            $this->rewards[] = $reward;
+            $reward->setProject($this);
         }
+
+        return $this;
     }
 
-    public function removePerson(Person $person): void
+    public function removeReward(Reward $reward): self
     {
-        if ($this->persons->removeElement($person)) {
-            $person->removeProject($this);
+        if ($this->rewards->removeElement($reward)) {
+            // set the owning side to null (unless already changed)
+            if ($reward->getProject() === $this) {
+                $reward->setProject(null);
+            }
         }
-    }
 
-    public function getReward(): ?Reward
-    {
-        return $this->reward;
-    }
-
-    public function setReward(?Reward $reward): void
-    {
-        $this->reward = $reward;
+        return $this;
     }
 }

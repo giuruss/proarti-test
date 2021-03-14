@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\RewardRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -15,27 +17,32 @@ class Reward
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
      */
-    private ?int $id = null;
+    private $id;
+
+    /**
+     * @ORM\Column(type="string", length=50)
+     */
+    private $name;
 
     /**
      * @ORM\Column(type="integer")
      */
-    private int $quantity;
+    private $quantity;
 
     /**
-     * @ORM\Column(type="string", length=255)
+     * @ORM\OneToMany(targetEntity=Donation::class, mappedBy="reward", orphanRemoval=true)
      */
-    private string $name;
+    private $donations;
 
     /**
-     * @ORM\OneToOne(targetEntity=Project::class, mappedBy="reward", cascade={"persist", "remove"})
+     * @ORM\ManyToOne(targetEntity=Project::class, inversedBy="rewards")
+     * @ORM\JoinColumn(nullable=false)
      */
-    private Project $project;
+    private $project;
 
-    public function __construct(string $name, int $quantity)
+    public function __construct()
     {
-        $this->name = $name;
-        $this->quantity = $quantity;
+        $this->donations = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -43,43 +50,69 @@ class Reward
         return $this->id;
     }
 
-    public function getQuantity(): int
-    {
-        return $this->quantity;
-    }
-
-    public function setQuantity(int $quantity): void
-    {
-        $this->quantity = $quantity;
-    }
-
-    public function getName(): string
+    public function getName(): ?string
     {
         return $this->name;
     }
 
-    public function setName(string $name): void
+    public function setName(string $name): self
     {
         $this->name = $name;
+
+        return $this;
     }
 
-    public function getProject(): Project
+    public function getQuantity(): ?int
+    {
+        return $this->quantity;
+    }
+
+    public function setQuantity(int $quantity): self
+    {
+        $this->quantity = $quantity;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Donation[]
+     */
+    public function getDonations(): Collection
+    {
+        return $this->donations;
+    }
+
+    public function addDonation(Donation $donation): self
+    {
+        if (!$this->donations->contains($donation)) {
+            $this->donations[] = $donation;
+            $donation->setReward($this);
+        }
+
+        return $this;
+    }
+
+    public function removeDonation(Donation $donation): self
+    {
+        if ($this->donations->removeElement($donation)) {
+            // set the owning side to null (unless already changed)
+            if ($donation->getReward() === $this) {
+                $donation->setReward(null);
+            }
+        }
+
+        return $this;
+    }
+
+    public function getProject(): ?Project
     {
         return $this->project;
     }
 
-    public function setProject(Project $project): void
+    public function setProject(?Project $project): self
     {
-        // unset the owning side of the relation if necessary
-        if (null === $project && null !== $this->project) {
-            $this->project->setReward(null);
-        }
-
-        // set the owning side of the relation if necessary
-        if (null !== $project && $project->getReward() !== $this) {
-            $project->setReward($this);
-        }
-
         $this->project = $project;
+
+        return $this;
     }
 }
