@@ -30,7 +30,6 @@ final class CsvManager implements CsvManagerInterface
         $this->serializer = $serializer;
         $this->personRepository = $personRepository;
         $this->projectRepository = $projectRepository;
-
     }
 
     /**
@@ -61,7 +60,7 @@ final class CsvManager implements CsvManagerInterface
         /* @var string $fileString */
         $fileString = \file_get_contents($file);
 
-        $data = $this->serializer->decode($fileString, 'csv', ['csv_delimiter' => ';']);
+        $data = $this->serializer->decode($fileString, 'csv', ['csv_delimiter' => ',']);
 
         if (\array_key_exists('results', $data)) {
             return $data['results'];
@@ -72,28 +71,13 @@ final class CsvManager implements CsvManagerInterface
 
     public function createPerson(string $filePath): void
     {
-//        $result = $this->personRepository->find('toto');
-//
-//        if (null !== $result) {
-//            echo $result->getAmount();
-//        }
-
         foreach ($this->getDataFromFile($filePath) as $row) {
-            if (isset($row['first_name'], $row['last_name'])) {
-                $person = new Person($row['first_name'], $row['last_name']);
-
-                if (!$this->entityManager->contains($person)) {
-                    $this->entityManager->persist($person);
-                }
-            }
 
             if (isset($row['project_name'], $row['amount'])) {
                 $project = new Project($row['project_name'], $row['amount']);
+
                 if (!$this->entityManager->contains($project)) {
                     $this->entityManager->persist($project);
-                }
-                if (isset($person)) {
-                    $person->addProject($project);
                 }
             }
 
@@ -101,9 +85,19 @@ final class CsvManager implements CsvManagerInterface
                 $reward = new Reward($row['reward'], $row['reward_quantity']);
                 if (!$this->entityManager->contains($reward)) {
                     $this->entityManager->persist($reward);
+                    if (isset($project)) {
+                        $reward->setProject($project);
+                    }
                 }
-                if (isset($project)) {
-                    $project->setReward($reward);
+            }
+
+            if (isset($row['first_name'], $row['last_name'])) {
+                $person = new Person($row['first_name'], $row['last_name']);
+                if (!$this->entityManager->contains($person)) {
+                    $this->entityManager->persist($person);
+                    if (isset($project)){
+                        $project->addPerson($person);
+                    }
                 }
             }
         }

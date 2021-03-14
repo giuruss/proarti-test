@@ -5,15 +5,11 @@ namespace App\Command;
 use App\CSV\CsvManager;
 use App\Interfaces\CSV\CsvManagerInterface;
 use App\Interfaces\Exceptions\BadColNameExceptionInterface;
-use App\Repository\PersonRepository;
-use App\Repository\ProjectRepository;
-use Doctrine\ORM\EntityManagerInterface;
 use SplFileObject;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\Serializer\SerializerInterface;
 
 final class UploadCSVCommand extends Command
 {
