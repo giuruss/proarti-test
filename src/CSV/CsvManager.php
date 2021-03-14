@@ -93,21 +93,26 @@ final class CsvManager implements CsvManagerInterface
                 } else {
                     $reward = new Reward($row['reward'], (int) $row['reward_quantity']);
                 }
+
                 if (!$this->entityManager->contains($reward)) {
                     $this->entityManager->persist($reward);
-                    if (isset($project)) {
-                        $reward->setProject($project);
-                    }
+                }
+
+                if (isset($project)) {
+                    $reward->setProject($project);
                 }
             }
 
             if (isset($row['first_name'], $row['last_name'])) {
+
                 $person = new Person($row['first_name'], $row['last_name']);
+
                 if (!$this->entityManager->contains($person)) {
                     $this->entityManager->persist($person);
-                    if (isset($project)){
-                        $project->addPerson($person);
-                    }
+                }
+
+                if (isset($project)) {
+                    $project->addPerson($person);
                 }
             }
         }
