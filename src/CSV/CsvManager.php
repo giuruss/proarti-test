@@ -56,15 +56,14 @@ final class CsvManager implements CsvManagerInterface
         return new ImportResult($persons, $donations, $rewards, $projects);
     }
 
-
-
     public function createPerson(string $filePath): void
     {
         foreach ($this->getDataFromFile($filePath) as $row) {
 
             if (isset($row['first_name'], $row['last_name'])) {
 
-                $person = $this->personRepository->findOneBy(['firstName' => $row['first_name'], 'lastName' => $row['last_name']]);
+                $person = $this->personRepository
+                    ->findOneBy(['firstName' => $row['first_name'], 'lastName' => $row['last_name']]);
 
                 if (null === $person) {
                     $person = new Person($row['first_name'], $row['last_name']);
@@ -81,13 +80,12 @@ final class CsvManager implements CsvManagerInterface
                     $project = new Project($row['project_name']);
                     $this->entityManager->persist($project);
                 }
-
             }
 
             if (isset($row['reward'])) {
 
                 $reward = $this->rewardRepository
-                    ->findOneBy(['name' => $row['reward'], 'quantity' => $row['reward_quantity']]);
+                    ->findOneBy(['name' => $row['reward']]);
 
                 if (null === $reward) {
                     if (\is_int($row['reward_quantity'])) {
