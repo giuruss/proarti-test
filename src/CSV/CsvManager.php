@@ -63,10 +63,10 @@ final class CsvManager implements CsvManagerInterface
             if (isset($row['first_name'], $row['last_name'])) {
 
                 $person = $this->personRepository
-                    ->findOneBy(['firstName' => $row['first_name'], 'lastName' => $row['last_name']]);
+                    ->findOneBy(['firstName' => trim($row['first_name']), 'lastName' => trim($row['last_name'])]);
 
                 if (null === $person) {
-                    $person = new Person($row['first_name'], $row['last_name']);
+                    $person = new Person(trim($row['first_name']), trim($row['last_name']));
                     $this->entityManager->persist($person);
                 }
 
@@ -74,7 +74,7 @@ final class CsvManager implements CsvManagerInterface
 
             if (isset($row['project_name'])) {
 
-                $project = $this->projectRepository->findOneBy(['name' => $row['project_name']]);
+                $project = $this->projectRepository->findOneBy(['name' => trim($row['project_name'])]);
 
                 if (null === $project) {
                     $project = new Project($row['project_name']);
@@ -85,13 +85,13 @@ final class CsvManager implements CsvManagerInterface
             if (isset($row['reward'])) {
 
                 $reward = $this->rewardRepository
-                    ->findOneBy(['name' => $row['reward']]);
+                    ->findOneBy(['name' => trim($row['reward'])]);
 
                 if (null === $reward) {
                     if (\is_int($row['reward_quantity'])) {
-                        $reward = new Reward($row['reward'], $row['reward_quantity'], $project);
+                        $reward = new Reward(trim($row['reward']), $row['reward_quantity'], $project);
                     } else {
-                        $reward = new Reward($row['reward'], (int)($row['reward_quantity']), $project);
+                        $reward = new Reward(trim($row['reward']), (int)($row['reward_quantity']), $project);
                     }
                     $this->entityManager->persist($reward);
                 }
