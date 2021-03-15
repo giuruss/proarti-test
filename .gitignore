@@ -8,6 +8,7 @@ docker-compose.override.yml
 /public/bundles/
 /var/
 /vendor/
+.php_cs.cache
 ###< symfony/framework-bundle ###
 
 ###> symfony/phpunit-bridge ###

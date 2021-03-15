@@ -1,0 +1,51 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+
+    <div>
+        {% if import_result is defined %}
+            {% if import_result is not null %}
+                <p><span class="text-bold">Nombre de personnes</span> : <span>{{ import_result.countPersons}}</span></p>
+                <p><span class="text-bold">Nombre de projets</span> : <span>{{ import_result.countProjects}}</span></p>
+                <p><span class="text-bold">Nombre de donations</span> : <span>{{ import_result.countDonations}}</span></p>
+                <p><span class="text-bold">Nombre de récompenses</span> : <span>{{ import_result.countRewards}}</span></p>
+
+                <table class="table table-striped">
+                    <thead>
+                    <tr>
+                        <th scope="col">Ligne non importée no</th>
+                        <th scope="col">Donnée liée à</th>
+                        <th scope="col">Donnée concernée</th>
+                        <th scope="col">Erreur</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for errors in import_result.errorCollectionTable %}
+                        {% for error in errors.errorsViolationlist %}
+                            <tr>
+                                <th scope="row">{{ errors.line + 1 }}</th>
+                                <td>{{ error.propertyPath }}</td>
+                                <td>{{ error.invalidValue }}</td>
+                                <td>{{ error.message }}</td>
+                            </tr>
+                        {% endfor %}
+                    {% endfor %}
+                    </tbody>
+                </table>
+
+            {% endif %}
+        {% endif %}
+    </div>
+
+    {% for message in app.flashes('success') %}
+        <div class="alert alert-success" role="alert">
+            <p>{{ message }}</p>
+        </div>
+    {% endfor %}
+
+    <h1>Ajout d'un fichier csv</h1>
+    {{ form_start(form) }}
+    {{ form_row(form.name) }}
+    {{ form_end(form) }}
+{% endblock %}
+
