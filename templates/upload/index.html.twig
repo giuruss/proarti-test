@@ -21,7 +21,7 @@
                     </thead>
                     <tbody>
                     {% for errors in import_result.errorCollectionTable %}
-                        {% for error in errors.errorsViolationlist %}
+                        {% for error in errors.errorsViolationlistInterface %}
                             <tr>
                                 <th scope="row">{{ errors.line + 1 }}</th>
                                 <td>{{ error.propertyPath }}</td>

@@ -15,12 +15,21 @@ use App\Interfaces\Gateways\RewardGatewayInterface;
 
 final class DataImportManager implements DataImportManagerInterface
 {
+    private PersonGatewayInterface $personGatewayInterface;
+    private ProjectGatewayInterface $projectGatewayInterface;
+    private RewardGatewayInterface $rewardGatewayInterface;
+    private DonationGatewayInterface $donationGatewayInterface;
+
     public function __construct(
-        private PersonGatewayInterface $personGatewayInterface,
-        private ProjectGatewayInterface $projectGatewayInterface,
-        private RewardGatewayInterface $rewardGatewayInterface,
-        private DonationGatewayInterface $donationGatewayInterface
+        PersonGatewayInterface $personGatewayInterface,
+        ProjectGatewayInterface $projectGatewayInterface,
+        RewardGatewayInterface $rewardGatewayInterface,
+        DonationGatewayInterface $donationGatewayInterface
     ) {
+        $this->personGatewayInterface = $personGatewayInterface;
+        $this->projectGatewayInterface = $projectGatewayInterface;
+        $this->rewardGatewayInterface = $rewardGatewayInterface;
+        $this->donationGatewayInterface = $donationGatewayInterface;
     }
 
     public function importPerson(string $firstName, string $lastName): Person

@@ -12,7 +12,7 @@ use Symfony\Component\Validator\Constraints\File;
 
 class UploadType extends AbstractType
 {
-    public function buildForm(FormBuilderInterface $builder, array $options): void
+    final public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
             ->add('name', FileType::class, [
@@ -34,7 +34,7 @@ class UploadType extends AbstractType
         ;
     }
 
-    public function configureOptions(OptionsResolver $resolver): void
+    final public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
             'data_class' => DTOupload::class,

@@ -10,13 +10,24 @@ use App\Interfaces\CSV\ImportResultInterface;
 
 final class ImportResult implements ImportResultInterface
 {
-    public function __construct(
-        private array $persons,
-        private array $projects,
-        private array $donations,
-        private array $rewards,
-        private iterable $errorCollectionTable
+    private array $persons;
+    private array $projects;
+    private array $donations;
+    private array $rewards;
+    private iterable $errorCollectionTable;
+
+    public function __construct (
+        array $persons,
+        array $projects,
+        array $donations,
+        array $rewards,
+        iterable $errorCollectionTable
     ) {
+        $this->persons = $persons;
+        $this->projects = $projects;
+        $this->donations = $donations;
+        $this->rewards = $rewards;
+        $this->errorCollectionTable = $errorCollectionTable;
     }
 
     /**

@@ -16,16 +16,33 @@ use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 final class CsvManager implements CsvManagerInterface
 {
+    private EntityManagerInterface $entityManager;
+    private SerializerInterface $serializer;
+    private PersonRepository $personRepository;
+    private DonationRepository $donationRepository;
+    private ProjectRepository $projectRepository;
+    private RewardRepository $rewardRepository;
+    private DataImportManagerInterface $dataImportManagerInterface;
+    private ValidatorInterface $validator;
+
     public function __construct(
-        private EntityManagerInterface $entityManager,
-        private SerializerInterface $serializer,
-        private PersonRepository $personRepository,
-        private DonationRepository $donationRepository,
-        private ProjectRepository $projectRepository,
-        private RewardRepository $rewardRepository,
-        private DataImportManagerInterface $dataImportManagerInterface,
-        private ValidatorInterface $validator
+        EntityManagerInterface $entityManager,
+        SerializerInterface $serializer,
+        PersonRepository $personRepository,
+        DonationRepository $donationRepository,
+        ProjectRepository $projectRepository,
+        RewardRepository $rewardRepository,
+        DataImportManagerInterface $dataImportManagerInterface,
+        ValidatorInterface $validator
     ) {
+        $this->entityManager = $entityManager;
+        $this->serializer = $serializer;
+        $this->personRepository = $personRepository;
+        $this->donationRepository = $donationRepository;
+        $this->projectRepository = $projectRepository;
+        $this->rewardRepository = $rewardRepository;
+        $this->dataImportManagerInterface = $dataImportManagerInterface;
+        $this->validator = $validator;
     }
 
     public function import(\SplFileInfo $filePath): ImportResultInterface
