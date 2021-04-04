@@ -5,22 +5,23 @@ namespace App\CSV;
 
 
 use Symfony\Component\Validator\ConstraintViolationList;
+use Symfony\Component\Validator\ConstraintViolationListInterface;
 
 final class ErrorCollection
 {
-    private ConstraintViolationList $errorsViolationlist;
+    private ConstraintViolationListInterface $errorsViolationlistInterface;
     private int $line;
 
 
-    public function __construct(ConstraintViolationList $errorsViolationlist, int $line)
+    public function __construct(ConstraintViolationListInterface $errorsViolationlistInterface, int $line)
     {
-        $this->errorsViolationlist = $errorsViolationlist;
+        $this->errorsViolationlistInterface = $errorsViolationlistInterface;
         $this->line = $line;
     }
 
-    public function getErrorsViolationlist(): ConstraintViolationList
+    public function getErrorsViolationlistInterface(): ConstraintViolationListInterface
     {
-        return $this->errorsViolationlist;
+        return $this->errorsViolationlistInterface;
     }
 
     public function getLine(): int

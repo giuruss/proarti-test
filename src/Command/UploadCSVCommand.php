@@ -43,7 +43,7 @@ final class UploadCSVCommand extends Command
         if(!empty($result->getErrorCollectionTable())) {
             foreach ($result->getErrorCollectionTable() as $key => $errors){
                 assert($errors instanceof ErrorCollection);
-                foreach ($errors->getErrorsViolationlist() as $error) {
+                foreach ($errors->getErrorsViolationlistInterface() as $error) {
                     $output->writeln('Ligne (non importée) no : '.$errors->getLine() + 1);
                     $output->writeln('Donnée liée à : '.$error->getPropertyPath());
                     $output->writeln('Donnée concernée : '.$error->getInvalidValue());
