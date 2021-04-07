@@ -53,7 +53,7 @@ final class DTOImportData
                                 $projectName,
                                 $rewardName,
                                 $rewardQuantity,
-                                $donationAmount,
+                                $donationAmount
     ) {
         $this->firstName = $firstName;
         $this->lastName = $lastName;
