@@ -12,7 +12,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 final class UploadCSVCommand extends Command
 {
-    protected static string $defaultName = 'app:upload-csv';
+    protected static $defaultName = 'app:upload-csv';
     protected CsvManagerInterface $csvManagerInterface;
 
     public function __construct(
