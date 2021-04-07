@@ -16,7 +16,7 @@ final class UploadCSVCommand extends Command
     protected CsvManagerInterface $csvManagerInterface;
 
     public function __construct(
-        CsvManagerInterface $csvManagerInterface,
+        CsvManagerInterface $csvManagerInterface
     ) {
         parent::__construct();
         $this->csvManagerInterface = $csvManagerInterface;
