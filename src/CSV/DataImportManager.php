@@ -44,7 +44,9 @@ final class DataImportManager implements DataImportManagerInterface
                 $firstNameValue,
                 $lastNameValue,
             );
-            echo $e->getMessage()."\n";
+
+            echo 'Concerned entity : '.$e->getClass().' ';
+
             $this->personGatewayInterface->persist($person);
 
             return $person;

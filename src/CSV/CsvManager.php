@@ -97,7 +97,7 @@ final class CsvManager implements CsvManagerInterface
 
                 $this->dataImportManagerInterface->importDonation($DTOImportData->donationAmount, $person, $reward);
 
-                $this->entityManager->flush();
+//                $this->entityManager->flush();
             }
         }
         return $errorCollectionTable;
