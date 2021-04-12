@@ -2,6 +2,7 @@
 
 namespace App\Repository;
 
+use App\Entity\Project;
 use App\Entity\Reward;
 use App\Exceptions\EntityNotFoundException;
 use App\Interfaces\Gateways\RewardGatewayInterface;
@@ -35,6 +36,20 @@ final class RewardRepository extends ServiceEntityRepository implements RewardGa
             echo $e->getMessage();
             throw $e;
         }
+    }
+
+    /**
+     * @throws NoResultException
+     * @throws NonUniqueResultException
+     */
+    public function getTotalRewardsQuantityByProject(Project $project): int
+    {
+        $query = $this->createQueryBuilder('rewards')
+            ->select('SUM(rewards.quantity) as sum')
+            ->andWhere('rewards.project = :project')
+            ->setParameter('project', $project);
+
+        return (int) $query->getQuery()->getSingleScalarResult();
     }
 
     public function persist(Reward $reward): void
