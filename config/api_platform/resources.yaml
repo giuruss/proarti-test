@@ -1,0 +1,11 @@
+# api/config/api_platform/resources.yaml
+resources:
+  App\Entity\Donation:
+    create:
+      method: POST
+      input: App\Entity\Project
+      output: App\Entity\Project
+    put:
+      method: PUT
+      input: App\Entity\Project
+      output: App\Entity\Project
