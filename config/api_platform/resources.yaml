@@ -1,20 +1,20 @@
 # api/config/api_platform/resources.yaml
-App\Entity\Book:
-  collectionOperations:
-    get: ~ # nothing more to add if we want to keep the default controller
-  itemOperations:
-    get: ~
+resources:
+  App\Entity\Person:
+    collectionOperations:
+      get: ~
+      post:
+        input: App\DTO\DTOCreateUser
+    itemOperations:
+      get: ~
+      put:
+        input: App\DTO\DTOCreateUser
+      delete: ~
 
 
-
-## api/config/api_platform/resources.yaml
-#resources:
-#  App\Entity\Donation:
-#    create:
-#      method: POST
-#      input: App\Entity\Project
-#      output: App\Entity\Project
-#    put:
-#      method: PUT
-#      input: App\Entity\Project
-#      output: App\Entity\Project
+#  POST/PUT
+#
+#  donation linked to a user, reward, project
+#  user
+#  project
+#  You have to use ApiPlatform.
