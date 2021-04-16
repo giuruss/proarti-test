@@ -23,13 +23,13 @@ final class PersonInputDataTransformer implements DataTransformerInitializerInte
     {
         assert($object instanceof DTOCreateUser);
         $this->validator->validate($object);
-        dump($object);
 
-        /** @var Person $person */
         $person = $context[AbstractItemNormalizer::OBJECT_TO_POPULATE];
         if (null === $person) {
             return new Person($object->firstName, $object->lastName);
         }
+
+        assert($person instanceof Person);
 
         $person->setFirstName($object->firstName);
         $person->setLastName($object->lastName);
