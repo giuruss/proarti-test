@@ -3,6 +3,8 @@
 namespace App\DTO;
 
 use Symfony\Component\Validator\Constraints as Assert;
+use App\Entity\Person;
+use App\Entity\Reward;
 
 final class DTOCreateDonation
 {
