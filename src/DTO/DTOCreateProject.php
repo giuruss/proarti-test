@@ -2,9 +2,9 @@
 
 namespace App\DTO;
 
-use Symfony\Component\Validator\Constraints as Assert;
 use App\Entity\Reward;
-use App\Validation\Constraints\RewardEntityExists;
+use App\Validator\EntityExist;
+use Symfony\Component\Validator\Constraints as Assert;
 
 final class DTOCreateProject
 {
@@ -16,7 +16,7 @@ final class DTOCreateProject
 
     /**
      * @Assert\Type("integer")
-     * @RewardEntityExists(class=Reward::class)
+     * @EntityExist(class=Reward::class)
      */
     public $rewardId;
 }

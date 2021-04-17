@@ -2,11 +2,10 @@
 
 namespace App\DTO;
 
-use Symfony\Component\Validator\Constraints as Assert;
 use App\Entity\Person;
 use App\Entity\Reward;
-use App\Validation\Constraints\PersonEntityExists;
-use App\Validation\Constraints\RewardEntityExists;
+use App\Validator\EntityExist;
+use Symfony\Component\Validator\Constraints as Assert;
 
 final class DTOCreateDonation
 {
@@ -20,14 +19,14 @@ final class DTOCreateDonation
     /**
      * @Assert\Type("integer")
      * @Assert\NotNull()
-     * @PersonEntityExists(class=Person::class)
+     * @EntityExist(class=Person::class)
      */
     public $personId;
 
     /**
      * @Assert\Type("integer")
      * @Assert\NotNull()
-     * @RewardEntityExists(class=Reward::class)
+     * @EntityExist(class=Reward::class)
      */
     public $rewardId;
 }
