@@ -14,7 +14,7 @@ final class DTOCreateProject
 
     /**
      * @Assert\Type("integer")
-     * @EntityExist(class=Reward::class)
+     * @RewardEntityExists(class=Reward::class)
      */
     public $rewardId;
 }

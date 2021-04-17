@@ -16,14 +16,14 @@ final class DTOCreateDonation
     /**
      * @Assert\Type("integer")
      * @Assert\NotNull()
-     * @EntityExist(class=Person::class)
+     * @PersonEntityExists(class=Person::class)
      */
     public $personId;
 
     /**
      * @Assert\Type("integer")
      * @Assert\NotNull()
-     * @EntityExist(class=Reward::class)
+     * @RewardEntityExists(class=Reward::class)
      */
     public $rewardId;
 }
