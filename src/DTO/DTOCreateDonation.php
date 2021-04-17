@@ -6,6 +6,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 final class DTOCreateDonation
 {
+
     /**
      * @Assert\Type("integer")
      * @Assert\NotBlank()
@@ -13,12 +14,16 @@ final class DTOCreateDonation
     public $amount;
 
     /**
-     * @Assert\Type("Person")
+     * @Assert\Type("integer")
+     * @Assert\NotNull()
+     * @EntityExist(class=Person::class)
      */
-    public $person;
+    public $personId;
 
     /**
-     * @Assert\Type("Reward")
+     * @Assert\Type("integer")
+     * @Assert\NotNull()
+     * @EntityExist(class=Reward::class)
      */
-    public $reward;
+    public $rewardId;
 }

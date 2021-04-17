@@ -36,7 +36,7 @@ final class ProjectInputDataTransformer implements DataTransformerInitializerInt
         assert($input instanceof DTOCreateProject);
 
         $input->projectName = $project->getName();
-        $input->reward = $project->getRewards();
+        $input->rewardId = $project->getRewards();
 
         return $input;
     }
@@ -54,7 +54,7 @@ final class ProjectInputDataTransformer implements DataTransformerInitializerInt
         assert($project instanceof Project);
 
         $project->setName($object->projectName);
-        $project->addReward($object->reward);
+        $project->addReward($object->rewardId);
         return $project;
     }
 

@@ -35,8 +35,8 @@ final class DonationInputDataTransformer implements DataTransformerInitializerIn
         assert($input instanceof DTOCreateDonation);
 
         $input->amount = $donation->getAmount();
-        $input->person = $donation->getPerson();
-        $input->reward = $donation->getReward();
+        $input->personId = $donation->getPerson();
+        $input->rewardId = $donation->getReward();
 
         return $input;
     }
@@ -48,14 +48,14 @@ final class DonationInputDataTransformer implements DataTransformerInitializerIn
 
         $donation = $context[AbstractItemNormalizer::OBJECT_TO_POPULATE];
         if (null === $donation) {
-            return new Donation($object->amount, $object->person, $object->reward);
+            return new Donation($object->amount, $object->personId, $object->rewardId);
         }
 
         assert($donation instanceof Donation);
 
         $donation->setAmount($object->amount);
-        $donation->setPerson($object->person);
-        $donation->setReward($object->reward);
+        $donation->setPerson($object->personId);
+        $donation->setReward($object->rewardId);
         return $donation;
     }
 

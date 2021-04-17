@@ -7,7 +7,7 @@ namespace App\DataTransformer;
 use ApiPlatform\Core\DataTransformer\DataTransformerInitializerInterface;
 use ApiPlatform\Core\Serializer\AbstractItemNormalizer;
 use ApiPlatform\Core\Validator\ValidatorInterface;
-use App\DTO\DTOCreateUser;
+use App\DTO\DTOCreatePerson;
 use App\Entity\Person;
 
 final class PersonInputDataTransformer implements DataTransformerInitializerInterface
@@ -21,7 +21,7 @@ final class PersonInputDataTransformer implements DataTransformerInitializerInte
 
     public function transform($object, string $to, array $context = []): Person
     {
-        assert($object instanceof DTOCreateUser);
+        assert($object instanceof DTOCreatePerson);
         $this->validator->validate($object);
 
         $person = $context[AbstractItemNormalizer::OBJECT_TO_POPULATE];
@@ -38,23 +38,25 @@ final class PersonInputDataTransformer implements DataTransformerInitializerInte
 
     public function supportsTransformation($data, string $to, array $context = []): bool
     {
-        return Person::class === $to && DTOCreateUser::class === $context['input']['class'];
+        return Person::class === $to && DTOCreatePerson::class === $context['input']['class'];
     }
 
-    public function initialize(string $inputClass, array $context = []): ?DTOCreateUser
+    public function initialize(string $inputClass, array $context = []): ?DTOCreatePerson
     {
-        if (DTOCreateUser::class !== $inputClass) {
+        if (DTOCreatePerson::class !== $inputClass) {
             return null;
         }
 
         $person = $context[AbstractItemNormalizer::OBJECT_TO_POPULATE];
+
         if (null === $person) {
             return null;
         }
+
         assert($person instanceof Person);
 
         $input = new $inputClass();
-        assert($input instanceof DTOCreateUser);
+        assert($input instanceof DTOCreatePerson);
 
         $input->lastName = $person->getLastName();
         $input->firstName = $person->getFirstName();

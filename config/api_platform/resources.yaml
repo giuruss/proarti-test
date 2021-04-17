@@ -4,11 +4,11 @@ resources:
     collectionOperations:
       get: ~
       post:
-        input: App\DTO\DTOCreateUser
+        input: App\DTO\DTOCreatePerson
     itemOperations:
       get: ~
       put:
-        input: App\DTO\DTOCreateUser
+        input: App\DTO\DTOCreatePerson
       delete: ~
 
   App\Entity\Project:
