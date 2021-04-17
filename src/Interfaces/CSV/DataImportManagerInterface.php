@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Interfaces\CSV;
 
 use App\Entity\Donation;

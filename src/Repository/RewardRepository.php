@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Repository;
 
 use App\Entity\Project;
@@ -70,5 +72,15 @@ final class RewardRepository extends ServiceEntityRepository implements RewardGa
             $this->_em->flush();
         } catch (OptimisticLockException | ORMException $e) {
         }
+    }
+
+    public function findById(int $id): Reward
+    {
+        return $this->createQueryBuilder('reward')
+            ->where('reward.id = :id')
+            ->setParameter('id', $id)
+            ->getQuery()
+            ->getSingleResult()
+            ;
     }
 }

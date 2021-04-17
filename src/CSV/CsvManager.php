@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\CSV;
 
 use App\DTO\DTOImportData;
@@ -63,7 +65,6 @@ final class CsvManager implements CsvManagerInterface
         $errorCollectionTable = [];
 
         foreach ($data as $kley => $row) {
-
             $rewardQuantity = $row['reward_quantity'];
             $donationAmount = $row['amount'];
 
@@ -73,13 +74,13 @@ final class CsvManager implements CsvManagerInterface
                     $row['last_name'],
                     $row['project_name'],
                     $row['reward'],
-                    is_numeric($rewardQuantity) ? (int) $rewardQuantity : $rewardQuantity,
-                    is_numeric($donationAmount) ? (int) $donationAmount : $donationAmount,
+                    \is_numeric($rewardQuantity) ? (int) $rewardQuantity : $rewardQuantity,
+                    \is_numeric($donationAmount) ? (int) $donationAmount : $donationAmount,
                 );
 
             $errors = $validator->validate($DTOImportData);
 
-            if (count($errors) > 0) {
+            if (\count($errors) > 0) {
                 $errorCollection = new ErrorCollection($errors, $kley);
                 $errorCollectionTable[] = $errorCollection;
             } else {
@@ -100,6 +101,7 @@ final class CsvManager implements CsvManagerInterface
                 $this->entityManager->flush();
             }
         }
+
         return $errorCollectionTable;
     }
 

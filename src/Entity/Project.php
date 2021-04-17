@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /** @noinspection MethodShouldBeFinalInspection */
 
 namespace App\Entity;
@@ -10,7 +12,6 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * @ApiResource()
  * @ORM\Entity(repositoryClass=ProjectRepository::class)
  */
 class Project

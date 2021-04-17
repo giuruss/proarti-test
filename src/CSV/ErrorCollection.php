@@ -1,17 +1,15 @@
 <?php
 
+declare(strict_types=1);
 
 namespace App\CSV;
 
-
-use Symfony\Component\Validator\ConstraintViolationList;
 use Symfony\Component\Validator\ConstraintViolationListInterface;
 
 final class ErrorCollection
 {
     private ConstraintViolationListInterface $errorsViolationlistInterface;
     private int $line;
-
 
     public function __construct(ConstraintViolationListInterface $errorsViolationlistInterface, int $line)
     {

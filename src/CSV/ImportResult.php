@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\CSV;
 
 use App\Entity\Donation;
@@ -16,7 +18,7 @@ final class ImportResult implements ImportResultInterface
     private array $rewards;
     private iterable $errorCollectionTable;
 
-    public function __construct (
+    public function __construct(
         array $persons,
         array $projects,
         array $donations,

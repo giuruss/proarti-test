@@ -1,10 +1,9 @@
 <?php
 
+declare(strict_types=1);
 
 namespace App\Serializer\Normalizer;
 
-
-use App\Entity\Donation;
 use App\Entity\Person;
 use App\Repository\DonationRepository;
 use Symfony\Component\Serializer\Normalizer\NormalizerAwareInterface;
@@ -13,7 +12,6 @@ use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 
 final class PersonNormalizer implements NormalizerInterface, NormalizerAwareInterface
 {
-
     use NormalizerAwareTrait;
 
     private const FORMATS = ['jsonld', 'json', 'xml'];
@@ -26,13 +24,15 @@ final class PersonNormalizer implements NormalizerInterface, NormalizerAwareInte
     }
 
     /**
+     * @param mixed|null $format
+     *
      * @throws \Symfony\Component\Serializer\Exception\ExceptionInterface
      * @throws \Doctrine\ORM\NonUniqueResultException
      * @throws \Doctrine\ORM\NoResultException
      */
     public function normalize($person, $format = null, array $context = []): iterable
     {
-        assert($person instanceof Person);
+        \assert($person instanceof Person);
         $this->alreadyCalled[] = $person->getId();
         $data = $this->normalizer->normalize($person, $format, $context);
         unset($this->alreadyCalled[\array_search($person->getId(), $this->alreadyCalled, true)]);

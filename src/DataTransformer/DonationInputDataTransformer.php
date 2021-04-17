@@ -9,19 +9,32 @@ use ApiPlatform\Core\Serializer\AbstractItemNormalizer;
 use ApiPlatform\Core\Validator\ValidatorInterface;
 use App\DTO\DTOCreateDonation;
 use App\Entity\Donation;
+use App\Interfaces\Gateways\PersonGatewayInterface;
+use App\Interfaces\Gateways\RewardGatewayInterface;
 
 final class DonationInputDataTransformer implements DataTransformerInitializerInterface
 {
     private ValidatorInterface $validator;
+    private PersonGatewayInterface $personGateway;
+    private RewardGatewayInterface $rewardGateway;
 
-    public function __construct(ValidatorInterface $validator)
+    public function __construct(
+        ValidatorInterface $validator,
+        PersonGatewayInterface $personGateway,
+        RewardGatewayInterface $rewardGateway)
     {
         $this->validator = $validator;
+        $this->personGateway = $personGateway;
+        $this->rewardGateway = $rewardGateway;
     }
 
     public function initialize(string $inputClass, array $context = []): ?DTOCreateDonation
     {
         if (DTOCreateDonation::class !== $inputClass) {
+            return null;
+        }
+
+        if (!array_key_exists(AbstractItemNormalizer::OBJECT_TO_POPULATE, $context)) {
             return null;
         }
 
@@ -46,16 +59,22 @@ final class DonationInputDataTransformer implements DataTransformerInitializerIn
         assert($object instanceof DTOCreateDonation);
         $this->validator->validate($object);
 
-        $donation = $context[AbstractItemNormalizer::OBJECT_TO_POPULATE];
+        $person = $this->personGateway->findById($object->personId);
+        $reward = $this->rewardGateway->findById($object->rewardId);
+
+        $donation = null;
+        if (array_key_exists(AbstractItemNormalizer::OBJECT_TO_POPULATE, $context)) {
+            $donation = $context[AbstractItemNormalizer::OBJECT_TO_POPULATE];
+        }
         if (null === $donation) {
-            return new Donation($object->amount, $object->personId, $object->rewardId);
+            return new Donation($object->amount, $person, $reward);
         }
 
         assert($donation instanceof Donation);
 
         $donation->setAmount($object->amount);
-        $donation->setPerson($object->personId);
-        $donation->setReward($object->rewardId);
+        $donation->setPerson($person);
+        $donation->setReward($reward);
         return $donation;
     }
 

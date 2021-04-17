@@ -1,8 +1,8 @@
 <?php
 
+declare(strict_types=1);
 
 namespace App\DataTransformer;
-
 
 use ApiPlatform\Core\DataTransformer\DataTransformerInitializerInterface;
 use ApiPlatform\Core\Serializer\AbstractItemNormalizer;
@@ -21,7 +21,7 @@ final class PersonInputDataTransformer implements DataTransformerInitializerInte
 
     public function transform($object, string $to, array $context = []): Person
     {
-        assert($object instanceof DTOCreatePerson);
+        \assert($object instanceof DTOCreatePerson);
         $this->validator->validate($object);
 
         $person = $context[AbstractItemNormalizer::OBJECT_TO_POPULATE];
@@ -29,10 +29,11 @@ final class PersonInputDataTransformer implements DataTransformerInitializerInte
             return new Person($object->firstName, $object->lastName);
         }
 
-        assert($person instanceof Person);
+        \assert($person instanceof Person);
 
         $person->setFirstName($object->firstName);
         $person->setLastName($object->lastName);
+
         return $person;
     }
 
@@ -53,10 +54,10 @@ final class PersonInputDataTransformer implements DataTransformerInitializerInte
             return null;
         }
 
-        assert($person instanceof Person);
+        \assert($person instanceof Person);
 
         $input = new $inputClass();
-        assert($input instanceof DTOCreatePerson);
+        \assert($input instanceof DTOCreatePerson);
 
         $input->lastName = $person->getLastName();
         $input->firstName = $person->getFirstName();

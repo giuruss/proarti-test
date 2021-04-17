@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Interfaces\Gateways;
 
 use App\Entity\Person;
@@ -15,4 +17,6 @@ interface PersonGatewayInterface
     public function persist(Person $person): void;
 
     public function persistAndFlush(Person $person): void;
+
+    public function findById(int $id): Person;
 }

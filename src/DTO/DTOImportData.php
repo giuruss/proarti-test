@@ -1,52 +1,50 @@
 <?php
 
+declare(strict_types=1);
 
 namespace App\DTO;
-
 
 use Symfony\Component\Validator\Constraints as Assert;
 
 final class DTOImportData
 {
-
     /**
      * @Assert\Type("string")
-     * @Assert\NotBlank()
+     * @Assert\NotBlank
      */
     public $firstName;
 
     /**
      * @Assert\Type("string")
-     * @Assert\NotBlank()
+     * @Assert\NotBlank
      */
     public $lastName;
 
     /**
      * @Assert\Type("string")
-     * @Assert\NotBlank()
+     * @Assert\NotBlank
      */
     public $projectName;
 
     /**
      * @Assert\Type("string")
-     * @Assert\NotBlank()
+     * @Assert\NotBlank
      */
     public $rewardName;
 
     /**
      * @Assert\Type("integer")
      * @Assert\Positive
-     * @Assert\NotBlank()
+     * @Assert\NotBlank
      */
     public $rewardQuantity;
 
     /**
      * @Assert\Type("integer")
      * @Assert\Positive
-     * @Assert\NotBlank()
+     * @Assert\NotBlank
      */
     public $donationAmount;
-
 
     public function __construct($firstName,
                                 $lastName,

@@ -1,8 +1,8 @@
 <?php
 
+declare(strict_types=1);
 
 namespace App\DataTransformer;
-
 
 use ApiPlatform\Core\DataTransformer\DataTransformerInitializerInterface;
 use ApiPlatform\Core\Serializer\AbstractItemNormalizer;
@@ -12,7 +12,6 @@ use App\Entity\Project;
 
 final class ProjectInputDataTransformer implements DataTransformerInitializerInterface
 {
-
     private ValidatorInterface $validator;
 
     public function __construct(ValidatorInterface $validator)
@@ -30,10 +29,10 @@ final class ProjectInputDataTransformer implements DataTransformerInitializerInt
         if (null === $project) {
             return null;
         }
-        assert($project instanceof Project);
+        \assert($project instanceof Project);
 
         $input = new $inputClass();
-        assert($input instanceof DTOCreateProject);
+        \assert($input instanceof DTOCreateProject);
 
         $input->projectName = $project->getName();
         $input->rewardId = $project->getRewards();
@@ -43,7 +42,7 @@ final class ProjectInputDataTransformer implements DataTransformerInitializerInt
 
     public function transform($object, string $to, array $context = []): Project
     {
-        assert($object instanceof DTOCreateProject);
+        \assert($object instanceof DTOCreateProject);
         $this->validator->validate($object);
 
         $project = $context[AbstractItemNormalizer::OBJECT_TO_POPULATE];
@@ -51,10 +50,11 @@ final class ProjectInputDataTransformer implements DataTransformerInitializerInt
             return new Project($object->projectName);
         }
 
-        assert($project instanceof Project);
+        \assert($project instanceof Project);
 
         $project->setName($object->projectName);
         $project->addReward($object->rewardId);
+
         return $project;
     }
 

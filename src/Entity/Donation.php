@@ -1,6 +1,6 @@
 <?php
 
-/** @noinspection MethodShouldBeFinalInspection */
+declare(strict_types=1);
 
 namespace App\Entity;
 
@@ -9,7 +9,6 @@ use App\Repository\DonationRepository;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * @ApiResource()
  * @ORM\Entity(repositoryClass=DonationRepository::class)
  */
 class Donation

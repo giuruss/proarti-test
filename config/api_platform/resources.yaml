@@ -33,6 +33,12 @@ resources:
         input: App\DTO\DTOCreateDonation
       delete: ~
 
+  App\Entity\Reward:
+    collectionOperations:
+      get: ~
+    itemOperations:
+      get: ~
+
 
 #  POST/PUT
 #

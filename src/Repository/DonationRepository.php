@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Repository;
 
 use App\Entity\Donation;
@@ -60,5 +62,4 @@ final class DonationRepository extends ServiceEntityRepository implements Donati
 
         return (int) $query->getQuery()->getSingleScalarResult();
     }
-
 }

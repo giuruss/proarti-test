@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Interfaces\Gateways;
 
 use App\Entity\Reward;
@@ -15,4 +17,6 @@ interface RewardGatewayInterface
     public function persist(Reward $reward): void;
 
     public function persistAndFlush(Reward $reward): void;
+
+    public function findById(int $id): Reward;
 }

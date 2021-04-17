@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\CSV;
 
 use App\Entity\Donation;
@@ -75,11 +77,13 @@ final class DataImportManager implements DataImportManagerInterface
             $reward = $this->rewardGatewayInterface->findByName($projectNameValue);
             $reward->setProject($project);
             $reward->setQuantity($rewardQuantity);
+
             return $reward;
         } catch (EntityNotFoundExceptionInterface $e) {
             $reward = new Reward($projectNameValue, $rewardQuantity, $project);
             echo $e->getMessage()."\n";
             $this->rewardGatewayInterface->persist($reward);
+
             return $reward;
         }
     }

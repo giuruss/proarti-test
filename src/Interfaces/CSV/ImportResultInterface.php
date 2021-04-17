@@ -1,8 +1,9 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Interfaces\CSV;
 
-use App\CSV\ErrorCollection;
 use App\Entity\Donation;
 use App\Entity\Person;
 use App\Entity\Project;

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Command;
 
 use App\CSV\ErrorCollection;
@@ -40,9 +42,9 @@ final class UploadCSVCommand extends Command
         $output->writeln('Nb Reward: '.$result->countRewards());
         $output->writeln('');
 
-        if(!empty($result->getErrorCollectionTable())) {
-            foreach ($result->getErrorCollectionTable() as $key => $errors){
-                assert($errors instanceof ErrorCollection);
+        if (!empty($result->getErrorCollectionTable())) {
+            foreach ($result->getErrorCollectionTable() as $key => $errors) {
+                \assert($errors instanceof ErrorCollection);
                 foreach ($errors->getErrorsViolationlistInterface() as $error) {
                     $output->writeln('Ligne (non importée) no : '.$errors->getLine() + 1);
                     $output->writeln('Donnée liée à : '.$error->getPropertyPath());

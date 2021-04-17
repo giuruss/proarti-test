@@ -1,8 +1,8 @@
 <?php
 
+declare(strict_types=1);
 
 namespace App\Serializer\Normalizer;
-
 
 use App\Entity\Project;
 use App\Repository\RewardRepository;
@@ -12,7 +12,6 @@ use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 
 final class ProjectNormalizer implements NormalizerInterface, NormalizerAwareInterface
 {
-
     use NormalizerAwareTrait;
 
     private const FORMATS = ['jsonld', 'json', 'xml'];
@@ -25,17 +24,19 @@ final class ProjectNormalizer implements NormalizerInterface, NormalizerAwareInt
     }
 
     /**
+     * @param mixed|null $format
+     *
      * @throws \Symfony\Component\Serializer\Exception\ExceptionInterface
      * @throws \Doctrine\ORM\NonUniqueResultException
      * @throws \Doctrine\ORM\NoResultException
      */
-    public function normalize($person, $format = null, array $context = []): iterable
+    public function normalize($project, $format = null, array $context = []): iterable
     {
-        assert($person instanceof Project);
-        $this->alreadyCalled[] = $person->getId();
-        $data = $this->normalizer->normalize($person, $format, $context);
-        unset($this->alreadyCalled[\array_search($person->getId(), $this->alreadyCalled, true)]);
-        $data['projectRewardsQuantity'] = $this->rewardRepository->getTotalRewardsQuantityByProject($person);
+        \assert($project instanceof Project);
+        $this->alreadyCalled[] = $project->getId();
+        $data = $this->normalizer->normalize($project, $format, $context);
+        unset($this->alreadyCalled[\array_search($project->getId(), $this->alreadyCalled, true)]);
+        $data['projectRewardsQuantity'] = $this->rewardRepository->getTotalRewardsQuantityByProject($project);
 
         return $data;
     }

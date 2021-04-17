@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Repository;
 
 use App\Entity\Person;
@@ -57,5 +59,15 @@ final class PersonRepository extends ServiceEntityRepository implements PersonGa
             $this->_em->flush();
         } catch (OptimisticLockException | ORMException $e) {
         }
+    }
+
+    public function findById(int $id): Person
+    {
+        return $this->createQueryBuilder('person')
+            ->where('person.id = :id')
+            ->setParameter('id', $id)
+            ->getQuery()
+            ->getSingleResult()
+        ;
     }
 }
